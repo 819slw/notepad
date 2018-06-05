@@ -50,118 +50,116 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
-import AddNewNote from '@/components/AddNewNote.vue'; // @ is an alias to /src  
-import DeleteNote from '@/components/DeleteNote.vue'; // @ is an alias to /src  
-import { create } from 'domain';
+import { Component, Vue, Watch } from "vue-property-decorator";
+import AddNewNote from "@/components/AddNewNote.vue"; // @ is an alias to /src
+import DeleteNote from "@/components/DeleteNote.vue"; // @ is an alias to /src
+import { create } from "domain";
 
 @Component({
   components: {
     AddNewNote,
     DeleteNote
-  },
+  }
 })
 export default class Home extends Vue {
-  private items:any =[]
-  private checkbox:boolean = true
-  private deleteIndex:number = 0
+  private items: any = [];
+  private checkbox: boolean = true;
+  private deleteIndex: number = 0;
 
-  private obj: object ={
-      title:'asd',
-      content:'dasdasdasdasdasdas',
-      checkbox:false
-    }
-  
+  private obj: object = {
+    title: "asd",
+    content: "dasdasdasdasdasdas",
+    checkbox: false
+  };
+
   private isDialog: boolean = false;
 
-  created(){
+  created() {
     /*
     *判断是否存在 不需要判断是否有值
     */
-   let str = JSON.stringify(this.obj);
-    let localStorageStr = localStorage.getItem('yyy');
-    if(localStorageStr){
+    let str = JSON.stringify(this.obj);
+    let localStorageStr = localStorage.getItem("yyy");
+    if (localStorageStr) {
       this.items = this.adjustmentData();
-    }else{ //当用户第一次 直接给一个空值
-      this.items = []
+    } else {
+      //当用户第一次 直接给一个空值
+      this.items = [];
     }
   }
 
-
   //事件
-  checkContent(index) {
-    this.$store.commit('isShowDeleteBox',true);
+  checkContent(index: number) {
+    this.$store.commit("isShowDeleteBox", true);
     this.isDialog = true;
     this.deleteIndex = index;
   }
 
-  adjustmentData(){
-    let localStorageStr = localStorage.getItem('yyy');
-    let arr = localStorageStr.split('+');
-    let transformArr = [];
-    arr.map((item,index)=>{
-      transformArr.push(JSON.parse(item));
-    })
-    return transformArr
+  adjustmentData() {
+    let localStorageStr = localStorage.getItem("yyy");
+    let arr = localStorageStr && localStorageStr.split("+");
+    let transformArr: any = [];
+    arr &&
+      arr.map((item, index) => {
+        transformArr && transformArr.push(JSON.parse(item));
+      });
+    return transformArr;
   }
 
-  adjustmentDataStr(data ){
-    let str = ''
+  adjustmentDataStr(data: any) {
+    let str = "";
     let length = data.length;
-    if(length <= 1){
+    if (length <= 1) {
       str = JSON.stringify(data[0]);
-    }else{
-      data.map((item,index)=>{
-        if(index == 0){
+    } else {
+      data.map((item: object, index: number) => {
+        if (index == 0) {
           str = JSON.stringify(data[0]);
-        }else{
-          str += '+'+ JSON.stringify(item);
+        } else {
+          str += "+" + JSON.stringify(item);
         }
-      })
+      });
     }
     return str;
-  }  
-
-  changeChecked(index:number){
-    console.log('萨达萨达撒');
-    this.items[index].checkbox = !this.items[index].checkbox;
-    let str = this.adjustmentDataStr(this.items);
-    localStorage.setItem('yyy',str);
   }
 
-  isDelete (flag:boolean){
+  changeChecked(index: number) {
+    this.items[index].checkbox = !this.items[index].checkbox;
+    let str = this.adjustmentDataStr(this.items);
+    localStorage.setItem("yyy", str);
+  }
+
+  isDelete(flag: boolean) {
     let index = this.deleteIndex;
-    if(flag){ 
-      this.items.splice(index,1);
+    if (flag) {
+      this.items.splice(index, 1);
       let newArr = this.adjustmentDataStr(this.items);
-      if(newArr){
-        localStorage.setItem('yyy',newArr);   //****
-      }else{
-        localStorage.setItem('yyy','');
+      if (newArr) {
+        localStorage.setItem("yyy", newArr); //****
+      } else {
+        localStorage.setItem("yyy", "");
       }
-      
     }
     this.isDialog = false;
     // this.$store.commit('isShowDeleteBox',false)
   }
 
-  AddNote(){
+  AddNote() {
     this.$router.push({
-      path: '/addNewNote'
+      path: "/addNewNote"
     });
   }
 
-  modify(index){
+  modify(index: number) {
     this.$router.push({
-      path: '/addNewNote?modify='+index+''
+      path: "/addNewNote?modify=" + index + ""
     });
   }
-
 }
 </script>
 <style>
-.finished{
-  text-decoration:line-through;
+.finished {
+  text-decoration: line-through;
   color: chartreuse;
 }
 </style>

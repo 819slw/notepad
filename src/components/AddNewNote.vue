@@ -17,112 +17,110 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { mapState, mapMutations, mapGetters } from 'vuex';
-import { setFlagsFromString } from 'v8';
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { mapState, mapMutations, mapGetters } from "vuex";
+import { setFlagsFromString } from "v8";
 
 interface ITodoItem {
-  id: string
-  content: string
-  isDone: boolean
+  title: string;
+  content: string;
+  isDone: boolean;
 }
 
-@Component({
-})
+@Component({})
 export default class AddNewNote extends Vue {
-  private msg: string = '';
-  private title: string = '';
+  private msg: string = "";
+  private title: string = "";
   private alert: boolean = false;
 
-  @Watch("$store.state.addnote") 
-  "$store.state.addnote"(n:any, o:any){
-    
-  }
+  @Watch("$store.state.addnote")
+  "$store.state.addnote"(n: any, o: any) {}
 
-  mounted(){
-    let index = this.$route.query.modify;
-    if(index){
+  mounted() {
+    let index: any = this.$route.query.modify;
+    if (index) {
       let nowTotal = this.adjustmentDataArr();
       this.title = nowTotal[index].title;
       this.msg = nowTotal[index].content;
-    }else{
-      let inputContent = document.getElementById('input_title');
+    } else {
+      let inputContent: any = document.getElementById("input_title");
       inputContent.focus();
     }
   }
 
-  saveContent(){
-    let index = this.$route.query.modify;
-    if( this.title =='' || this.msg==''){
+  saveContent() {
+    let index: any = this.$route.query.modify;
+    if (this.title == "" || this.msg == "") {
       this.alert = true;
       setTimeout(() => {
         this.alert = false;
       }, 1000);
-    }else{
-      if(index){
+    } else {
+      if (index) {
         let arr = this.adjustmentDataArr();
         arr[index].title = this.title;
         arr[index].content = this.msg;
         let str = this.adjustmentDataStr(arr);
-        localStorage.setItem('yyy',str);
-      }else{
+        localStorage.setItem("yyy", str);
+      } else {
         let content = {
-          title:this.title,
-          content:this.msg,
-          checkbox:false
+          title: this.title,
+          content: this.msg,
+          checkbox: false
         };
-        let locContent = localStorage.getItem('yyy');   //str
+        let locContent = localStorage.getItem("yyy"); //str
         let newNote = JSON.stringify(content);
-        let willSaveNote = '';
-        if(locContent){
+        let willSaveNote = "";
+        if (locContent) {
           let length = locContent.length;
-          if(length > 1){
-            willSaveNote = locContent +'+'+ newNote;
-          }else{
+          if (length > 1) {
+            willSaveNote = locContent + "+" + newNote;
+          } else {
             willSaveNote = newNote;
           }
-        }else{
+        } else {
           willSaveNote = newNote;
         }
-        localStorage.setItem('yyy',willSaveNote);
+        localStorage.setItem("yyy", willSaveNote);
       }
       this.$router.push({
-        path:'/'
-      })   
+        path: "/"
+      });
     }
   }
 
-  adjustmentDataStr(data){
-    let str = ''
+  adjustmentDataStr(data: any) {
+    let str = "";
     let length = data.length;
-    if(length <= 1){
+    if (length <= 1) {
       str = JSON.stringify(data[0]);
-    }else{
-      data.map((item,index:number)=>{
-        if(index == 0){
+    } else {
+      data.map((item: any, index: number) => {
+        if (index == 0) {
           str = JSON.stringify(data[0]);
-        }else{
-          str += '+'+ JSON.stringify(item);
+        } else {
+          str += "+" + JSON.stringify(item);
         }
-      })
+      });
     }
     return str;
   }
 
-  adjustmentDataArr() :Array<ITodoItem>{
-    let localStorageStr = localStorage.getItem('yyy');
-    let arr = localStorageStr && localStorageStr.split('+');
+  adjustmentDataArr(): Array<ITodoItem> {
+    let localStorageStr = localStorage.getItem("yyy");
+    let arr = localStorageStr && localStorageStr.split("+");
     let transformArr: Array<ITodoItem> = [];
-    arr && arr.map((item,index)=>{
-      transformArr.push(JSON.parse(item) as ITodoItem);
-    })
-    return transformArr
+    arr &&
+      arr.map((item, index) => {
+        transformArr.push(JSON.parse(item) as ITodoItem);
+      });
+    return transformArr;
   }
 
-  cancel(){
+  cancel() {
     this.$router.push({
-      path:'/'
-    })
+      path: "/"
+    });
   }
 }
 </script>
@@ -143,11 +141,10 @@ li {
 a {
   color: #42b983;
 }
-#input_content{
+#input_content {
   width: 100%;
-  height: calc( 100vh - 115px );
+  height: calc(100vh - 115px);
 }
-.hello{
-  
+.hello {
 }
 </style>
