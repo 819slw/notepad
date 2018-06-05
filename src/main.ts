@@ -6,6 +6,8 @@ import store from './store';
 
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
+import 'babel-polyfill'
+
 Vue.use(Vuetify);
 
 Vue.config.productionTip = false;

@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { watch } from 'fs';
 import { log } from 'util';
 
@@ -27,7 +27,7 @@ import { log } from 'util';
     components:{
 
     },
-    ...mapGetters(['isDialog'])
+    ...mapState(['isDialog'])
 })
 export default class DeleteNote extends Vue {
 
